@@ -1,4 +1,4 @@
-from modules import open_photoshop, drag_images_from_folder_7x10, open_existing_document, drag_images_from_folder_10x10, QPlainTextEditLogger, drag_images_from_folder_6x9, drag_images_from_folder_13x18, drag_images_from_folder_9x13
+from modules import resource_path, open_photoshop, drag_images_from_folder_7x10, open_existing_document, drag_images_from_folder_10x10, QPlainTextEditLogger, drag_images_from_folder_6x9, drag_images_from_folder_13x18, drag_images_from_folder_9x13
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
 from PyQt6 import uic
 import sys
@@ -14,8 +14,7 @@ class DesignThread(QThread):
 
     def run(self):
         try:
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            file_path_base = os.path.join(script_dir, "base", "page_white.jpg")
+            file_path_base = resource_path("base/page_white.jpg")
             self.logger.info("Khởi động Photoshop...")
             ps_app = open_photoshop(self.logger)
             
@@ -43,8 +42,7 @@ class DesignThread_710(QThread):
 
     def run(self):
         try:
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            file_path_base = os.path.join(script_dir, "base", "page_white.jpg")
+            file_path_base = resource_path("base/page_white.jpg")
             self.logger.info("Khởi động Photoshop...")
             ps_app = open_photoshop(self.logger)
             
@@ -71,8 +69,7 @@ class DesignThread_69(QThread):
 
     def run(self):
         try:
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            file_path_base = os.path.join(script_dir, "base", "page_white.jpg")
+            file_path_base = resource_path("base/page_white.jpg")
             self.logger.info("Khởi động Photoshop...")
             ps_app = open_photoshop(self.logger)
             
@@ -99,8 +96,7 @@ class DesignThread_1318(QThread):
 
     def run(self):
         try:
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            file_path_base = os.path.join(script_dir, "base", "page_white.jpg")
+            file_path_base = resource_path("base/page_white.jpg")
             self.logger.info("Khởi động Photoshop...")
             ps_app = open_photoshop(self.logger)
             
@@ -127,8 +123,7 @@ class DesignThread_913(QThread):
 
     def run(self):
         try:
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            file_path_base = os.path.join(script_dir, "base", "page_white.jpg")
+            file_path_base = resource_path("base/page_white.jpg")
             self.logger.info("Khởi động Photoshop...")
             ps_app = open_photoshop(self.logger)
             
@@ -150,20 +145,31 @@ class DesignThread_913(QThread):
 
 class Login(QMainWindow):
     def __init__(self):
-        super().__init__()
-        self.ui = uic.loadUi("gui/home.ui", self)
+        super().__init__()  
+        ui_path = self.resource_path('gui/home.ui')
+        self.ui = uic.loadUi(ui_path, self)
         logTextBox = QPlainTextEditLogger(self)
         logTextBox.appendPlainText.connect(self.activity.append)
         self.logger = logging.getLogger('AppLogger')
         self.logger.addHandler(logTextBox)
         self.logger.setLevel(logging.DEBUG)
-        self.logger.info("Open App Auto")
+        self.logger.info("Open App AutoSS")
         self.ui.btn_url_1010.clicked.connect(self.select_url)
         self.ui.btn_design.clicked.connect(self.start_design_thread)
         self.ui.btn_design_1.clicked.connect(self.start_design_thread_710)
         self.ui.btn_design_2.clicked.connect(self.start_design_thread_69)
         self.ui.btn_design_3.clicked.connect(self.start_design_thread_1318)
         self.ui.btn_design_4.clicked.connect(self.start_design_thread_913)
+        
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
         
     def select_url(self):
         folder_path = QFileDialog.getExistingDirectory(self, "Chọn thư mục", "/")
