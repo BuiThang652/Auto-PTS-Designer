@@ -29,7 +29,6 @@ def open_photoshop(logger):
             return ps_app
         else:
             ps_app = win32com.client.Dispatch("Photoshop.Application")
-            logger.info("Photoshop đã được mở.")
             return ps_app
     except Exception as e:
         logger.error("Không thể mở Photoshop:", e)
@@ -177,21 +176,64 @@ def drag_images_from_folder_10x10(logger, ps_app, folder_path, dst_doc):
     for i, filename in enumerate(files):
         file_path = os.path.join(folder_path, filename)
         src_doc = open_existing_document(ps_app, file_path)
-        # Tính toán vị trí x và y hiện tại trước khi kiểm tra điều kiện
         current_x = x_positions[i % len(x_positions)]
-        current_y = y_position + (i // len(x_positions)) * 10  # Tăng y lên 10 sau mỗi 4 hình ảnh
+        current_y = y_position + (i // len(x_positions)) * 10 
 
         if check_10x10(src_doc):
             set_image_size(src_doc, 15, 10)
+            time.sleep(0.2)
             drag_image_to_position(ps_app, src_doc, dst_doc, current_x, current_y)
+            time.sleep(0.2)
             src_doc.Close(2)
         else:
             dst_doc_10x10 = open_existing_document(ps_app, base_image_path)
             if src_doc and dst_doc_10x10:
                 drag_image_to_fit(ps_app, src_doc, dst_doc_10x10)
+                time.sleep(0.2)
                 drag_image_to_position(ps_app, dst_doc_10x10, dst_doc, current_x, current_y)
+                time.sleep(0.2)
                 src_doc.Close(2)
+                time.sleep(0.2)
                 dst_doc_10x10.Close(2)
+        time.sleep(0.2)
+                
+        logger.info(f"Thiết kế ảnh thứ {i+1}: {file_path}")
+        
+def drag_images_from50_folder_10x15(logger, ps_app, folder_path, dst_doc):
+    x_positions = [0, 10, 20, 30, 40]  # Các vị trí x cố định
+    y_position = 0  # Y bắt đầu từ 0
+    # Lấy đường dẫn của thư mục hiện tại của script
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Đường dẫn đến thư mục hiện tại của file
+    base_dir = os.path.dirname(script_dir)  # Lùi lại một cấp thư mục để ra khỏi thư mục 'modules'
+    # Tạo đường dẫn tương đối đến thư mục 'base'
+    base_image_path = os.path.join(base_dir, "base", "15x10.jpg")
+    # Kết hợp đường dẫn tương đối với thư mục hiện tại của script
+    files = os.listdir(folder_path)
+
+    for i, filename in enumerate(files):
+        file_path = os.path.join(folder_path, filename)
+        src_doc = open_existing_document(ps_app, file_path)
+        # Tính toán vị trí x và y hiện tại trước khi kiểm tra điều kiện
+        current_x = x_positions[i % len(x_positions)]
+        current_y = y_position + (i // len(x_positions)) * 15 
+
+        if check_15x10(src_doc):
+            set_image_size(src_doc, 10, 15)
+            time.sleep(0.2)
+            drag_image_to_position(ps_app, src_doc, dst_doc, current_x, current_y)
+            time.sleep(0.2)
+            src_doc.Close(2)
+        else:
+            dst_doc_10x10 = open_existing_document(ps_app, base_image_path)
+            if src_doc and dst_doc_10x10:
+                drag_image_to_fit(ps_app, src_doc, dst_doc_10x10, 9.41, 14.41)
+                time.sleep(0.2)
+                drag_image_to_position(ps_app, dst_doc_10x10, dst_doc, current_x, current_y)
+                time.sleep(0.2)
+                src_doc.Close(2)
+                time.sleep(0.2)
+                dst_doc_10x10.Close(2)
+        time.sleep(0.2)
                 
         logger.info(f"Thiết kế ảnh thứ {i+1}: {file_path}")
 
@@ -216,12 +258,46 @@ def drag_images_from_folder_7x10(logger, ps_app, folder_path, dst_doc):
         
         if src_doc and dst_doc_7x10:
             drag_image_to_fit(ps_app, src_doc, dst_doc_7x10, 9.41, 6.41)
+            time.sleep(0.2)
             drag_image_to_position(ps_app, dst_doc_7x10, dst_doc, current_x, current_y)
+            time.sleep(0.2)
             src_doc.Close(2)
+            time.sleep(0.2)
             dst_doc_7x10.Close(2)
+        time.sleep(0.2)
                 
         logger.info(f"Thiết kế ảnh thứ {i+1}: {file_path}")
-
+        
+def drag_images_from50_folder_7x10(logger, ps_app, folder_path, dst_doc):
+    x_positions = [0, 10, 20, 30, 40]  # Các vị trí x cố định
+    y_position = 0  # Y bắt đầu từ 0
+    # Lấy đường dẫn của thư mục hiện tại của script
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Đường dẫn đến thư mục hiện tại của file
+    base_dir = os.path.dirname(script_dir)  # Lùi lại một cấp thư mục để ra khỏi thư mục 'modules'
+    # Tạo đường dẫn tương đối đến thư mục 'base'
+    base_image_path = os.path.join(base_dir, "base", "7x10.jpg")
+    # Kết hợp đường dẫn tương đối với thư mục hiện tại của script
+    files = os.listdir(folder_path)
+    
+    for i, filename in enumerate(files):
+        file_path = os.path.join(folder_path, filename)
+        src_doc = open_existing_document(ps_app, file_path)
+        # Tính toán vị trí x và y hiện tại trước khi kiểm tra điều kiện
+        current_x = x_positions[i % len(x_positions)]
+        current_y = y_position + (i // len(x_positions)) * 7  # Tăng y lên 7 sau mỗi 6 hình ảnh
+        dst_doc_7x10 = open_existing_document(ps_app, base_image_path)
+        
+        if src_doc and dst_doc_7x10:
+            drag_image_to_fit(ps_app, src_doc, dst_doc_7x10, 9.41, 6.41)
+            time.sleep(0.2)
+            drag_image_to_position(ps_app, dst_doc_7x10, dst_doc, current_x, current_y)
+            time.sleep(0.2)
+            src_doc.Close(2)
+            time.sleep(0.2)
+            dst_doc_7x10.Close(2)
+        time.sleep(0.2)
+                
+        logger.info(f"Thiết kế ảnh thứ {i+1}: {file_path}")
 
 def drag_images_from_folder_6x9(logger, ps_app, folder_path, dst_doc):
     x_positions = [0, 6, 12, 18, 24, 30, 36, 42, 48, 54]  # Các vị trí x cố định
@@ -244,9 +320,13 @@ def drag_images_from_folder_6x9(logger, ps_app, folder_path, dst_doc):
         
         if src_doc and dst_doc_6x9:
             drag_image_to_fit(ps_app, src_doc, dst_doc_6x9, 5.40, 8.41)
+            time.sleep(0.2)
             drag_image_to_position(ps_app, dst_doc_6x9, dst_doc, current_x, current_y)
+            time.sleep(0.2)
             src_doc.Close(2)
+            time.sleep(0.2)
             dst_doc_6x9.Close(2)
+        time.sleep(0.2)
                 
         logger.info(f"Thiết kế ảnh thứ {i+1}: {file_path}")
 
@@ -270,15 +350,59 @@ def drag_images_from_folder_13x18(logger, ps_app, folder_path, dst_doc):
 
         if check_13x18(src_doc):
             set_image_size(src_doc, 12.5, 17.6)
+            time.sleep(0.2)
             drag_image_to_position(ps_app, src_doc, dst_doc, current_x, current_y)
+            time.sleep(0.2)
             src_doc.Close(2)
         else:
             dst_doc_13x18 = open_existing_document(ps_app, base_image_path)
             if src_doc and dst_doc_13x18:
                 drag_image_to_fit(ps_app, src_doc, dst_doc_13x18, 11.91, 17)
+                time.sleep(0.2)
                 drag_image_to_position(ps_app, dst_doc_13x18, dst_doc, current_x, current_y)
+                time.sleep(0.2)
                 src_doc.Close(2)
+                time.sleep(0.2)
                 dst_doc_13x18.Close(2)
+        time.sleep(0.2)
+                
+        logger.info(f"Thiết kế ảnh thứ {i+1}: {file_path}")
+        
+def drag_images_from50_folder_13x18(logger, ps_app, folder_path, dst_doc):
+    x_positions = [0, 12.5, 25, 37.5]  # Các vị trí x cố định
+    y_position = 0  # Y bắt đầu từ 0
+    # Lấy đường dẫn của thư mục hiện tại của script
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Đường dẫn đến thư mục hiện tại của file
+    base_dir = os.path.dirname(script_dir)  # Lùi lại một cấp thư mục để ra khỏi thư mục 'modules'
+    # Tạo đường dẫn tương đối đến thư mục 'base'
+    base_image_path = os.path.join(base_dir, "base", "13x18.jpg")
+    # Kết hợp đường dẫn tương đối với thư mục hiện tại của script
+    files = os.listdir(folder_path)
+
+    for i, filename in enumerate(files):
+        file_path = os.path.join(folder_path, filename)
+        src_doc = open_existing_document(ps_app, file_path)
+        # Tính toán vị trí x và y hiện tại trước khi kiểm tra điều kiện
+        current_x = x_positions[i % len(x_positions)]
+        current_y = y_position + (i // len(x_positions)) * 17.6  # Tăng y lên 10 sau mỗi 4 hình ảnh
+
+        if check_13x18(src_doc):
+            set_image_size(src_doc, 12.5, 17.6)
+            time.sleep(0.2)
+            drag_image_to_position(ps_app, src_doc, dst_doc, current_x, current_y)
+            time.sleep(0.2)
+            src_doc.Close(2)
+        else:
+            dst_doc_13x18 = open_existing_document(ps_app, base_image_path)
+            if src_doc and dst_doc_13x18:
+                drag_image_to_fit(ps_app, src_doc, dst_doc_13x18, 11.91, 17)
+                time.sleep(0.2)
+                drag_image_to_position(ps_app, dst_doc_13x18, dst_doc, current_x, current_y)
+                time.sleep(0.2)
+                src_doc.Close(2)
+                time.sleep(0.2)
+                dst_doc_13x18.Close(2)
+        time.sleep(0.2)
                 
         logger.info(f"Thiết kế ảnh thứ {i+1}: {file_path}")
 
@@ -302,15 +426,59 @@ def drag_images_from_folder_9x13(logger, ps_app, folder_path, dst_doc):
 
         if check_9x13(src_doc):
             set_image_size(src_doc, 12.5, 8.8)
+            time.sleep(0.2)
             drag_image_to_position(ps_app, src_doc, dst_doc, current_x, current_y)
+            time.sleep(0.2)
             src_doc.Close(2)
         else:
             dst_doc_9x13 = open_existing_document(ps_app, base_image_path)
             if src_doc and dst_doc_9x13:
                 drag_image_to_fit(ps_app, src_doc, dst_doc_9x13, 11.9, 8.21)
+                time.sleep(0.2)
                 drag_image_to_position(ps_app, dst_doc_9x13, dst_doc, current_x, current_y)
+                time.sleep(0.2)
                 src_doc.Close(2)
+                time.sleep(0.2)
                 dst_doc_9x13.Close(2)
+        time.sleep(0.2)
+                
+        logger.info(f"Thiết kế ảnh thứ {i+1}: {file_path}")
+        
+def drag_images_from50_folder_9x13(logger, ps_app, folder_path, dst_doc):
+    x_positions = [0, 12.5, 25, 37.5]  # Các vị trí x cố định
+    y_position = 0  # Y bắt đầu từ 0
+    # Lấy đường dẫn của thư mục hiện tại của script
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Đường dẫn đến thư mục hiện tại của file
+    base_dir = os.path.dirname(script_dir)  # Lùi lại một cấp thư mục để ra khỏi thư mục 'modules'
+    # Tạo đường dẫn tương đối đến thư mục 'base'
+    base_image_path = os.path.join(base_dir, "base", "9x13.jpg")
+    # Kết hợp đường dẫn tương đối với thư mục hiện tại của script
+    files = os.listdir(folder_path)
+
+    for i, filename in enumerate(files):
+        file_path = os.path.join(folder_path, filename)
+        src_doc = open_existing_document(ps_app, file_path)
+        # Tính toán vị trí x và y hiện tại trước khi kiểm tra điều kiện
+        current_x = x_positions[i % len(x_positions)]
+        current_y = y_position + (i // len(x_positions)) * 8.8  # Tăng y lên 10 sau mỗi 4 hình ảnh
+
+        if check_9x13(src_doc):
+            set_image_size(src_doc, 12.5, 8.8)
+            time.sleep(0.2)
+            drag_image_to_position(ps_app, src_doc, dst_doc, current_x, current_y)
+            time.sleep(0.2)
+            src_doc.Close(2)
+        else:
+            dst_doc_9x13 = open_existing_document(ps_app, base_image_path)
+            if src_doc and dst_doc_9x13:
+                drag_image_to_fit(ps_app, src_doc, dst_doc_9x13, 11.9, 8.21)
+                time.sleep(0.2)
+                drag_image_to_position(ps_app, dst_doc_9x13, dst_doc, current_x, current_y)
+                time.sleep(0.2)
+                src_doc.Close(2)
+                time.sleep(0.2)
+                dst_doc_9x13.Close(2)
+        time.sleep(0.2)
                 
         logger.info(f"Thiết kế ảnh thứ {i+1}: {file_path}")
 
@@ -334,6 +502,26 @@ def check_10x10(doc):
         # print("Lỗi khi truy cập thông tin tài liệu:", e)
         return False
    
+def check_15x10(doc):
+    try:
+        width = doc.Width
+        height = doc.Height
+        resolution = doc.Resolution
+        
+        # Tính tỷ lệ giữa chiều rộng và chiều cao
+        aspect_ratio = height / width
+        
+        # Kiểm tra tỷ lệ này có xấp xỉ 1.5 hay không (ví dụ: chấp nhận sai số 1%)
+        if abs(aspect_ratio - 1.5) / 1.5 < 0.01 and resolution == 300:
+            # print(f"Tài liệu '{doc.FullName}' có tỷ lệ xấp xỉ 15:10 và độ phân giải 300 dpi.")
+            return True
+        else:
+            # print(f"Tài liệu '{doc.FullName}' không đạt tỷ lệ 15:10 yêu cầu hoặc sai độ phân giải.")
+            return False
+    except Exception as e:
+        # print("Lỗi khi truy cập thông tin tài liệu:", e)
+        return False   
+
 def check_13x18(doc):
     try:
         width = doc.Width

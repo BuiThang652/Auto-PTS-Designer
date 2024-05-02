@@ -1,12 +1,11 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-block_cipher = None
 
 a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('gui/*', 'gui'), ('base/*', 'base')],  # Thêm các thư mục chứa tài nguyên
+    datas=[('gui/main.ui', 'gui'), ('base/', 'base')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -14,13 +13,12 @@ a = Analysis(
     excludes=[],
     noarchive=False,
 )
-pyz = PYZ(a.pure, a.zipped_data, cipher=None)
+pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
     a.scripts,
     a.binaries,
-    a.zipfiles,
     a.datas,
     [],
     name='main',
@@ -36,5 +34,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='F:/Auto-PTS-Designer/base/logo.ico',  # Đảm bảo chỉ định đường dẫn file icon dưới dạng chuỗi
+    icon=['F:\\Auto-PTS-Designer\\base\\logo.ico'],
 )
